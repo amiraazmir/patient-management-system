@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+ <head th:include="fragments/header :: header-css">
+
+</head>
+<body>
+	<div id="main" style="margin-bottom: 0.5cm">
+    <div th:include="fragments/header :: header-admin"></div>
+     <div class="container" style="text-align: left">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h3>
+                        <span class="glyphicon glyphicon-info-sign"></span>&nbsp;<span th:text="#{managedoctor}">Manage Doctor</span>
+                    </h3>
+                </div>
+                <div th:include="fragments/header :: header-table"></div>
+            </div>
+        </div>
+		<hr
+			style="width: 100%; color: black; height: 1px; background-color: black;" />
+		<div class="container-fluid"
+			style="border: 1px solid #cecece; margin: 0.5cm 1cm 0.25cm 1cm">
+			<ul class="nav nav-tabs" id="myTab"
+				style="margin-top: 0.25cm; background-color: #b7dce5">
+				<li class="active"><a href="#DoctorList" data-toggle="tab" th:text="#{doctorlist}"><span
+						class="glyphicon glyphicon-list"></span>&nbsp;Doctor List</a></li>
+				<li><a href="#addDoctor" data-toggle="tab" th:text="#{adddoctor}"><span
+						class="glyphicon glyphicon-plus"></span>&nbsp;Add Doctor</a></li>
+			</ul>
+                    <span th:utext="${successMessage}"></span>
+
+			<div class="tab-content">
+				<div class="tab-pane active table-responsive" id="DoctorList">
+					<table class="table table-hover" id="bootstrap-table">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th th:text="#{name}">Name</th>
+								<th th:text="#{email}">Email</th>
+								<th th:text="#{mobileno}">Mobile Number</th>
+								<th th:text="#{department}">Department</th>
+								<th th:text="#{option}">Options</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="doctor:${doctorList}">
+								<td th:text="${doctor.doctorName}"></td>
+								<td th:text="${doctor.doctorName}"></td>
+								<td th:text="${doctor.doctorEmail}"></td>
+								<td th:text="${doctor.mobileNo}"></td>
+								<td th:text="${doctor.doctorDepartment}"></td>
+								<td class="btn-toolbar"> 
+								<a th:href="@{/admin/doctorpage/edit/{doctorID}(doctorID=${doctor.doctorID})}">
+										<button class="btn btn-primary btn-s" data-title="Edit"
+											data-toggle="modal" data-target="#edit" title="Edit"
+											onclick="return confirmAction()">
+											<span class="glyphicon glyphicon-pencil"></span>
+										</button>
+								</a> <a
+									th:href="@{/admin/doctorpage/delete/{doctorID}(doctorID=${doctor.doctorID})}">
+										<button class="btn btn-danger btn-s" data-title="Delete"
+											data-toggle="modal" data-target="#delete" title="Delete"
+											onclick="return deleteAction()">
+											<span class="glyphicon glyphicon-trash"></span>
+										</button>
+								</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="tab-pane" id="addDoctor">
+					<form th:action="@{/admin/doctorpage/addDoctor}" id="accountForm" method="post"
+						class="form-horizontal" th:object="${doctor}">
+
+						<div class="form-group" style="margin-top: 0.5cm;">
+							<label class="col-xs-3 control-label" th:text="#{username}">Username</label>
+							<div class="col-xs-5">
+								<input type="text" class="form-control" id="user.username" name="user.username"/>
+								<label th:if="${#fields.hasErrors('user.username')}"
+                                th:errors="*{user.username}" class="validation-message"></label>
+							</div>
+						</div>
+
+
+
+						<div class="form-group">
+							<label class="col-xs-3 control-label" th:text="#{password}">Password</label>
+							<div class="col-xs-5">
+								<input type="password" class="form-control" id="user.password" name="user.password" />
+								<label th:if="${#fields.hasErrors('user.password')}"
+                                th:errors="*{user.password}"></label>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-3 control-label" th:text="#{fullname}">Full name</label>
+							<div class="col-xs-5">
+								<input type="text" class="form-control" id="doctorName"
+									name="doctorName" />
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-3 control-label" th:text="#{email}">Email</label>
+							<div class="col-xs-5">
+								<input type="text" class="form-control" name="doctorEmail"
+									id="doctorEmail" />
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-3 control-label" th:text="#{mobileno}">Mobile No</label>
+							<div class="col-xs-5">
+								<input type="text" class="form-control" id="mobileNo" name="mobileNo" />
+									<label th:if="${#fields.hasErrors('mobileNo')}"
+                                th:errors="*{mobileNo}" class="validation-message" style="color:darkred;font-size:11px"></label>
+							</div>
+						</div>
+
+
+						<div class="form-group">
+						 <label class="col-xs-3 control-label" th:text="#{department}">Department</label>
+						  <div class="col-xs-5">
+							<select class="form-control"  name="doctorDepartment" id="doctorDepartment">
+									<option value="" th:text="#{choosedept}">--Select a department--</option>
+									<option th:value="Cardiology">Cardiology</option>
+									<option th:value="Dermatology">Dermatology</option>
+									<option th:value="Gynecology">Gyneacology</option>
+									<option th:value="Neurology">Neurology</option>
+									<option th:value="Rheumatology">Rheumatology</option>
+							</select>
+						  </div>
+						</div>
+						<div class="form-group" style="margin-top: 15px;">
+							<div class="col-xs-5 col-xs-offset-3">
+								<button type="submit" class="btn btn-default"  style="background-color: #008CBA; color: white" id="btn_submit" onclick="return confirmAction()" th:text="#{adddoctor}">Add doctor</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="footer navbar-fixed-bottom">&copy; LP Batch 4 Virtusa
+		Singapore</div>
+</body>
+</html>

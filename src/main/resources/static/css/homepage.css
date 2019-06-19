@@ -1,0 +1,25 @@
+button {
+	margin: 10px 20px;
+}
+
+h1 {
+	color: #191970;
+	text-align: center;
+}
+
+#ft {
+	border-top: 1px solid white;
+}
+
+.panel-default {
+	background: none;
+	border-color: white;
+}
+
+#center {
+	text-align: center;
+}
+
+.container {
+	width: 600px;
+}

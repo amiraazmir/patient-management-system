@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+ <head th:include="fragments/header :: header-css">
+</head>
+<body>
+    <div id="main">
+        <div th:include="fragments/header :: header-doc"></div>
+<div class="container" style="text-align: left">
+                 <div class="row">
+                <div class="col-sm-4">
+                    <h3>
+                        <span class="glyphicon glyphicon-info-sign"></span>&nbsp;<span th:text="#{doctordashboard}"> Doctor Dashboard</span>
+                    </h3>
+                </div>
+                <div th:include="fragments/header :: header-table"></div>
+            </div>
+            </div>
+        <hr
+            style="width: 100%; color: black; height: 1px; background-color: black;" />
+        <table class="table" style="text-align: center; width: 100%;">
+            <thead>
+                <tr>
+                    <th id="blankcol"></th>
+                    <th class="warning" id="fillcol">1</th>
+                    <th id="blankcol"></th>
+                    <th class="warning" id="fillcol">2</th>
+                    <th id="blankcol"></th>
+                    <th class="warning" id="fillcol">3</th>
+                    <th id="blankcol"></th>
+             
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+
+                    <td id="blankcol"></td>
+                    <td class="active" id="fillcol"><a th:href="@{/doctor/patientcondition}"><i
+                            class="glyphicon glyphicon-user" style="font-size: 36px;"></i><br/>
+                            <span th:text="#{patient}">Patient</span></a></td>
+                    <td id="blankcol"></td>
+                    <td class="active" id="fillcol"><a th:href="@{/doctor/prescription}"><i
+                            class="fa fa-medkit" style="font-size: 36px;"></i><br/>
+                            <span th:text="#{prescription}">Prescription</span></a></td>
+                    <td id="blankcol"></td>
+                    <td class="active" id="fillcol"><a th:href="@{/doctor/viewAppointment}"><i
+                            class="fa fa-wpforms" style="font-size: 36px"></i><br/>
+                            <span th:text="#{appointment}">Appointment</span></a></td>
+                    <td id="blankcol"></td>
+     
+                </tr>
+            </tbody>
+        </table>
+        <div class="container theme-showcase">
+            <div id="holder" class="row"></div>
+        </div>
+      
+    </div>
+    <div class="footer navbar-fixed-bottom">&copy; LP Batch 4 Virtusa Singapore</div>
+</body>
+</html>

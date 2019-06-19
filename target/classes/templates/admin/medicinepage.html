@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+ <head th:include="fragments/header :: header-css">
+<script type="text/javascript">
+function editAction(){
+      var confirmed = confirm("Confirm to edit?");
+      return confirmed;
+}
+
+</script>
+
+</head>
+<body>
+	<div id="main" style="margin-bottom: 0.5cm">
+		<div th:include="fragments/header :: header-admin"></div>
+		<div class="container" style="text-align: left">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h3>
+                        <span class="glyphicon glyphicon-info-sign"></span>&nbsp;<span th:text="#{managemed}">Manage Medicine</span>
+                    </h3>
+                </div>
+                <div th:include="fragments/header :: header-table"></div>
+            </div>
+        </div>
+		<hr
+			style="width: 100%; color: black; height: 1px; background-color: black;" />
+		<div class="container-fluid" style="border: 1px solid #cecece;">
+			<ul class="nav nav-tabs"
+				style="margin-top: 0.25cm; background-color: #b7dce5">
+				<li class="active"><a href="#MedicineList" data-toggle="tab" th:text="#{medlist}"><span
+						class="glyphicon glyphicon-list"></span>&nbsp;Medicine List </a></li>
+			</ul>
+
+			<div class="tab-content">
+				<div class="tab-pane active table-responsive" id="MedicineList">
+					<table class="table table-hover" id="bootstrap-table">
+						<thead>
+							<tr>
+								<th style="width: 18%;">Id</th>
+								<th style="width: 40%;" th:text="#{name}">Name</th>
+								<th style="width: 18%;" th:text="#{quantity}">Quantity</th>
+								<th style="width: 24%;" th:text="#{option}">Options</th>
+							</tr>
+						</thead>
+
+						<tbody>
+
+							<tr th:each="medicine:${medicines}">
+								<td th:text="${medicine.medicineID}"></td>
+								<td th:text="${medicine.medicineName}"></td>
+								<td th:text="${medicine.quantity}"></td>
+								<td class="btn-toolbar">
+								
+                                <a th:href="@{/admin/medicinepage/edit/{id}(id=${medicine.medicineID})}">
+                                <button class="btn btn-primary btn-s" data-title="Edit" data-toggle="modal" data-target="#edit" title="Edit" onclick="return editAction()"><span class="glyphicon glyphicon-pencil"></span>
+                                </button> </a>
+                                
+                                </td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<div class="footer navbar-fixed-bottom">&copy; LP Batch 4 Virtusa
+		Singapore</div>
+</body>
+</html>
+

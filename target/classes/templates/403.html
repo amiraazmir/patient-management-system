@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Patient Management System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../css/interface.css" type="text/css">
+<link rel="stylesheet" href="../css/homepage.css" type="text/css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.1/css/bootstrapValidator.min.css" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.5.3/js/bootstrapValidator.js"></script>
+</head>
+<body>
+<body>
+	<nav class="navbar navbar-inverse" style="background-color: #e3f2fd">
+
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">Patient Management System</a>
+			</div>
+			<ul class="nav navbar-nav">
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#"><span class="glyphicon glyphicon-earphone"></span>
+						Contact Us</a></li>
+			</ul>
+		</div>
+	</nav>
+<body>
+	<div class="container">
+
+		<div class="starter-template">
+			<h1>403 - Access is denied</h1>
+			<h3><div th:inline="text">Hello
+				'[[${#httpServletRequest.remoteUser}]]', you do not have permission
+				to access this page.</div></h3>
+		</div>
+		<form th:action="@{/}" method="get">
+		<button class="btn btn-default btn-md" type="Submit">Return To Login Page</button>
+	</form>	
+	</div>
+
+	<div class="footer navbar-fixed-bottom">&copy; LP Batch 4 Virtusa
+		Singapore</div>
+</body>
+</html>

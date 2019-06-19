@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+ <head th:include="fragments/header :: header-css">
+</head>
+<body>
+    <div id="main">
+               <div th:include="fragments/header :: header-doc"></div>
+                     <div class="container" style="text-align: left">
+                 <div class="row">
+                <div class="col-sm-4">
+                    <h3>
+                        <span class="glyphicon glyphicon-info-sign"></span>&nbsp;<span th:text="#{patientcondition}">Patient Condition</span>
+                    </h3>
+                </div>
+                <div th:include="fragments/header :: header-table"></div>
+            </div>
+            </div>
+        <hr
+            style="width: 100%; color: black; height: 1px; background-color: black;" />
+        <div class="container-fluid"
+            style="border: 1px solid #cecece; margin: 0.5cm 1cm 0.25cm 1cm">
+            <ul class="nav nav-tabs" style="margin-top: 0.25cm">
+                <li class="active"><a href="#PatientConditionList" data-toggle="tab" th:text="#{patientconditionlist}"><span
+                        class="glyphicon glyphicon-list"></span>&nbsp;Patient Condition List</a></li>
+                <li><a href="#AddPatientCondition" data-toggle="tab" th:text="#{addpatientcondition}"><span
+                        class="glyphicon glyphicon-plus"></span>&nbsp;Add Patient Condition</a></li>
+            </ul>
+          
+            <!-- view patient datatable -->
+            <div class="tab-content">
+                <div class="tab-pane active table-responsive" id="PatientConditionList">
+                    <table class="table table-hover" id="bootstrap-table">
+                        <thead>
+                            <tr>
+  
+                                <th width="25%" th:text="patientname" th:text="#{patientname}">Patient Name</th>
+                                <th width="10%" th:text="patientcondition" th:text="#{condition}">Condition</th>
+                                <th width="15%" th:text="patientcondition" th:text="#{conditionid}">ConditionID</th>
+                                 <th width="15%" th:text="#{appointmentdate}">Appointment Date</th>
+                                <th width="15%" th:text="#{option}">Option</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           <tr th:each="patientCondition:${patientsconditions}">
+                           
+                    <td th:text="${patientCondition.patient?.patientName}"></td>
+                    <td th:text="${patientCondition.conditionName}"></td>
+                    <td th:text="${patientCondition.conditionID}"></td>
+                    <td th:text="${patientCondition.apptDate}"></td>
+            <td class="btn-toolbar">
+                                    <a th:href="@{patientcondition/edit/{conditionID}(conditionID=${patientCondition.conditionID})}" > 
+                                    <button id="btnEdit" class="btn btn-primary btn-s" data-title="Edit" data-toggle="modal" data-target="#squarespaceModal" title="Edit">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </button></a>
+                                  <a th:href="@{patientcondition/delete/{conditionID}(conditionID=${patientCondition.conditionID})}"> 
+                                <button class="btn btn-danger btn-s" data-title="Delete" data-toggle="modal" data-target="#delete" title="Delete">
+                                <span class="glyphicon glyphicon-trash"></span>
+                                </button> </a> 
+                                </td>
+                                
+                              
+                </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                            <div class="tab-pane" id="AddPatientCondition">
+                            <div class="alert alert-success" id="success_message"  role="alert" style="display:none;">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Successfully submitted!</strong> The form is valid.
+      </div>
+    <!--   <div class="alert alert-success fade in" id="success-message">
+    <a href="#" class="close" data-dismiss="alert">&times;</a>
+    <strong>Success!</strong> Your message has been sent successfully.
+</div> -->
+
+                    <form id="accountForm" method="post" class="form-horizontal" th:object="${patientCondition}" th:action="@{/addPatient}">
+                        
+                        <div class="form-group" style="margin-top: 1cm;">
+                            <label class="col-xs-3 control-label" th:text="#{patientname}">Patient Name</label>
+                            <div class="col-xs-5">
+                                <select class="form-control" name="patientName" id="patientName" th:field="*{patient.patientID}">
+                              <option th:each="patient: ${patientList}"
+                              th:value="${patient.patientID}"
+                              th:text="${patient.patientName}">
+                              
+                              </option>
+                              </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-xs-3 control-label" th:text="#{conditionname}">Condition Name</label>
+                            <div class="col-xs-5">
+                            <textarea rows="4" cols="50" class="form-control" name="conditionName" id="conditionName" th:field="*{conditionName}">
+                            </textarea>
+
+                            </div>
+                        </div>
+                            
+                    <div class="form-group" style="margin-top: 1cm;">
+                            <label class="col-xs-3 control-label" th:text="#{appointmentdate}">Appointment Date</label>
+                            <div class="col-xs-5">
+                                <select class="form-control" name="apptDate" id="apptDate" th:field="*{apptDate}">
+                            <!--  <option th:each="appointment: ${appointmentDateList}"
+                              th:value="${appointment.appointmentDate}" th:text="${appointment.appointmentDate}">
+                                 
+                              </option> --> 
+                              </select>
+                              
+                            </div>
+                        </div>
+
+<!-- 
+                                        <div class="form-group">
+                            <label class="col-xs-3 control-label">Date</label>
+                            <div class="col-xs-5">
+
+                                <input type="date" class="form-control" id="appointmentDate" name="appointmentDate" th:field="*{appointmentDate}"/>
+
+                            </div>
+                        </div>  -->
+                        <div class="form-group"
+                            style="margin-top: 1cm; margin-bottom: 1cm;">
+                            <div class="col-xs-5 col-xs-offset-3">
+                                <button type="submit" class="btn btn-default"
+                                    style="background-color: #008CBA; color: white" id="btnSubmit" th:text="#{addpatientcondition}">Add
+                                    Patient Condition</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+     
+                <script type="application/javascript">
+                function sendAjaxRequest(){
+                	var patientID = $("#patientName").val();
+                	$.get( "/appointmentDates?patientID=" + patientID, function( data ) {
+                	$("#apptDate").empty();
+                	    data.forEach(function(item, i) {
+                	    var option = "<option value = " + item + ">" + item +  "</option>";
+                	    $("#apptDate").append(option);
+                	    });
+                	});
+                	};
+    $(document).ready(function () {
+    	$(document).ready(
+    		    function() {
+    		        $("#patientName").change(function() {
+    		        sendAjaxRequest();
+    		        });
+    		    }
+    		);
+    	/* dropdown list on change */
+   /*  	$("#patientName").change(function() {
+    		  if ($(this).data('options') === undefined) {
+    		    /*Taking an array of all options-2 and kind of embedding it on the select1*/
+    		   /*  $(this).data('options', $('#appointmentDate option').clone());
+    		  }
+    		  var id = $(this).val();
+    		  var options = $(this).data('options').filter('[value=' + id + ']');
+    		  $('#appointmentDate').html(options);
+    		});  */ 
+    	/*submit form on click*/ 
+     /*   $('#btnSubmit').on("click",function (e) {
+           e.preventDefault();
+         
+       //var bv = form.data('bootstrapValidator');
+       // Use Ajax to submit form data
+
+          var patientName, conditionName;
+           patientName = $('#patientName').val();
+           conditionName = $('#conditionName').val();
+           //date = $('#pdate').val();
+         
+               var data = {};
+               data["patientName"] = patientName;
+               data["conditionName"] = conditionName;
+               //data["pdate"] = date;
+               $.ajax({
+                   type: "POST",
+                   contentType: "application/json",
+                   url: "/addPatient",
+                   data: JSON.stringify(data),
+                   dataType: 'json',
+                   timeout: 6000,
+                   success: function (data) {
+                	   $('#success_message').slideDown({ opacity: "show" }, "slow") // Do something ...
+                       $('#accountForm').data('bootstrapValidator').resetForm();
+                   }
+               });
+            
+       }); */
+    });
+</script>
+            </div>
+        </div>
+    </div>
+    <div class="footer navbar-fixed-bottom">&copy; LP Batch 4 Virtusa
+        Singapore</div>
+</body>
+</html>

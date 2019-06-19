@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+ <head th:include="fragments/header :: header-css">
+ 
+
+</head>
+<body>
+    <div id="main" style="margin-bottom: 0.5cm">
+                       <div th:include="fragments/header :: header-doc"></div>
+                        <div class="container" style="text-align: left">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h3>
+                        <span class="glyphicon glyphicon-info-sign"></span>&nbsp;<span th:text="#{prescription}">Prescription</span>
+                    </h3>
+                </div>
+                <div th:include="fragments/header :: header-table"></div>
+            </div>
+        </div>
+        <hr
+            style="width: 100%; color: black; height: 1px; background-color: black;" />
+        <div class="container-fluid"
+            style="border: 1px solid #cecece; margin: 0.5cm 1cm 0.25cm 1cm">
+            <ul class="nav nav-tabs"
+                style="margin-top: 0.25cm; background-color: #b7dce5">
+                <li class="active"><a href="#PrescriptionList"
+                    data-toggle="tab" th:text="#{prescriptionlist}"><span class="glyphicon glyphicon-list"></span>&nbsp;Prescription
+                        List</a></li>
+                <li><a href="#AddPrescription" data-toggle="tab" th:text="#{addprescription}"><span
+                        class="glyphicon glyphicon-plus"></span>&nbsp;Add Prescription</a></li>
+
+            </ul>
+            <div class="tab-content">
+                <!-- view prescription datatable -->
+
+                <div class="tab-pane active table-responsive" id="PrescriptionList">
+                    <table class="table table-hover" id="bootstrap-table">
+                        <thead>
+                            <tr>
+                                <!--                                 <th style="width: 10%;">ID</th> -->
+                                <th style="width: 15%;" th:text="#{patientname}">Patient</th>
+                                <th style="width: 15%;" th:text="#{doctorname}">Doctor</th>
+                                <th style="width: 20%;" th:text="#{medicine}">Medication</th>
+                                <th style="width: 20%;" th:text="#{medicalhistory}">Case History</th>
+                                <th style="width: 10%;" th:text="#{prescriptiondate}">Prescription Date</th>
+                                <th style="width: 20%;" th:text="#{option}">Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="prescription:${prescriptions}">
+                                <td th:text="${prescription.patientName}"></td>
+                                <td th:text="${prescription.doctorName}"></td>
+
+                                <td>
+                                          <div th:each="medicine, iter : ${#strings.listSplit(prescription.medicineName,',')}"  >
+                                         
+                                          <div th:each="quantity, iter2: ${#strings.listSplit(prescription.quantity,',')}" > 
+                                
+                                                  <div th:if="${iter.index==iter2.index}" th:text="${medicine} + ': ' + ${quantity}">
+                                                     
+                                                </div>
+                                         </div> 
+                                </div>
+                              
+                                </td>
+                                
+                                <td th:text="${prescription.casehistory}"></td>
+                                <td th:text="${prescription.pdate}"></td>
+                                <td class="btn-toolbar">
+                                    <a th:href="@{/edit/{prescriptionID}(prescriptionID=${prescription.prescriptionID})}">
+                                        <button class="btn btn-primary btn-s" data-title="Edit"
+                                            data-toggle="modal" data-target="#edit" title="Edit">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </button></a>
+                                 <a th:href="@{/doctor/prescription/delete/{id}(id=${prescription.prescriptionID})}">
+                                        <button class="btn btn-danger btn-s" data-title="Delete"
+                                            data-toggle="modal" data-target="#delete" title="Delete">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- add prescription form -->
+                <div class="tab-pane" id="AddPrescription">
+                    <form id="accountForm" class="form-horizontal" method="post"
+                        th:object="${prescription}" th:action="@{/addPrescriptions}">
+                        <div class="form-group" style="margin-top: 1cm;">
+                            <label class="col-xs-3 control-label">Doctor</label>
+                            <div class="col-xs-5">
+                                <input type="text" class="form-control" id="doctorName"
+                                    name="doctorName" th:value="${doctorName}" readonly="readonly"/>
+                            
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-xs-3 control-label" th:text="#{patient}">Patient</label>
+                            <div class="col-xs-5">
+                                <select id="patientName" name="patientName" class="form-control">
+                                    <option th:each="patient : ${patient}"
+                                        th:value="${patient.patientName}" th:text="${patient.patientName}">Options</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-xs-3 control-label" th:text="#{medicalhistory}">Case History </label>
+                            <div class="col-xs-5">
+
+                                <textarea rows="2" id="casehistory" th:field="*{casehistory}"
+                                    class="form-control left-border-none">></textarea>
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-xs-3 control-label" th:text="#{medicine}">Medication</label>
+                            <div class="col-xs-5">
+                                <table class="table table-hover">
+
+                                    <thead>
+                                        <tr>
+
+                                            <th th:text="#{medicine}">Medicine</th>
+                                            <th th:text="#{quantity}">Quantity</th>
+
+                                        </tr>
+                                    </thead>
+
+
+                                    <tbody id="dataTable">
+                                        <tr>
+                                            <td><select id="medicineName" name="medicineName"
+                                                class="form-control" onclick="disableDropdown()">
+                                                    <option th:each="medicine : ${medicine}"
+                                                        th:value="${medicine.medicineName}"
+                                                        th:text="${medicine.medicineName}">Options</option>
+                                            </select></td>
+                                            <td><input type="number" min="0" class="form-control"
+                                                name="quantity" id="quantity" maxlength="3"></input></td>
+                                            <td>
+                                                <button class="btn btn-default" id="addBtn"
+                                                    name="btnSubmit" onclick="return addRow('dataTable')">
+                                                    <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                            </td>
+
+                                            <td>
+                                                <button class="btn btn-default" id="deleteBtn"
+                                                    name="deleteBtn" onclick="return deleteRow('dataTable')">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-xs-3 control-label">Date</label>
+                            <div class="col-xs-5">
+
+                                <input type="date" class="form-control" id="pdate" name="pdate" />
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group"
+                            style="margin-top: 1cm; margin-bottom: 1cm;">
+                            <div class="col-xs-5 col-xs-offset-3">
+                                <button type="submit" class="btn btn-default"
+                                    style="background-color: #008CBA; color: white" th:text="#{addprescription}">Add
+                                    Prescription</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <div class="footer navbar-fixed-bottom">&copy; LP Batch 4 Virtusa
+        Singapore</div>
+</body>
+</html>

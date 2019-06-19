@@ -1,0 +1,192 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+ <head th:include="fragments/header :: header-css">
+</head>
+<body>
+
+    <div id="main" style="margin-bottom: 0.5cm">
+                <div th:include="fragments/header :: header-admin"></div>
+                <div class="container" style="text-align: left">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h3>
+                        <span class="glyphicon glyphicon-info-sign"></span>&nbsp;<span th:text="#{manageappointment}">Manage Appointment</span>
+                    </h3>
+                </div>
+                <div th:include="fragments/header :: header-table"></div>
+            </div>
+        </div>
+        <hr
+            style="width: 100%; color: black; height: 1px; background-color: black;" />
+        <div class="container-fluid"
+            style="border: 1px solid #cecece; margin: 0.5cm 1cm 0.25cm 1cm">
+            <ul class="nav nav-tabs" id ="myTab"
+                style="margin-top: 0.25cm; background-color: #b7dce5">
+                <li class="active"><a href="#PatientList" data-toggle="tab" th:text="#{appointmentlist}"><span
+                        class="glyphicon glyphicon-list"></span>&nbsp;Appointment List</a></li>
+                <li><a href="#AddPatient" data-toggle="tab" th:text="#{addappointment}"><span
+                        class="glyphicon glyphicon-plus"></span>&nbsp;Add Appointment</a></li>
+            </ul>
+            <!-- view patient datatable -->
+            <div class="tab-content">
+                <div class="tab-pane active table-responsive" id="PatientList">
+                    <table class="table table-hover" id="bootstrap-table">
+                        <thead>
+                            <tr>
+                                <th>NRIC</th>
+                                <th th:text="#{appointmentid}">Appointment Id</th>
+                                <th th:text="#{patientname}">Patient Name</th>
+                                <th th:text="#{doctorname}">Doctor Name</th>
+                                <th th:text="#{appointmentdate}">Appointment Date</th>
+                                <th th:text="#{appointmenttime}">Appointment Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="appointment:${appointmentlist}">
+
+                                <td th:text="${appointment.patient?.patientNric}"></td>
+                                <td th:text="${appointment.appointmentID}"></td>
+                                <td th:text="${appointment.patient.patientName}"></td>
+                                <td th:text="${appointment.doctor.doctorName}"></td>
+                                <td th:text="${appointment.appointmentDate}"></td>
+                                <td th:text="${appointment.appointmentTime}"></td>
+
+                                <td class="btn-toolbar"><a
+                                    th:href="@{/admin/patientappointment/edit/{id}(id=${appointment.appointmentID})}">
+                                        <button class="btn btn-primary btn-s" data-title="Edit"
+                                            data-toggle="modal" data-target="#edit" title="Edit" onclick="return confirmAction()">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </button>
+                                </a> <a
+                                    th:href="@{/admin/patientappointment/delete/{id}(id=${appointment.appointmentID})}">
+                                        <button class="btn btn-danger btn-s" data-title="Delete"
+                                            data-toggle="modal" data-target="#delete" title="Delete" onclick="return deleteAction()">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                </a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- add appointment form -->
+                <div class="tab-pane" id="AddPatient">
+                    <div class="container-fluid">
+                        <div class='col-xs-12'>
+                            <div class="panel-body">
+
+                                <form id="accountForm" th:action="@{/admin/patientappointment/save}" 
+                                    th:object="${appointment}" method="post" 
+                                    class="form-horizontal">
+                                    
+                                    <div class="form-group">
+                                        <label class="col-xs-3 control-label"></label>
+                                        <div class="col-xs-6">
+                                           <span th:utext="${successMessage}" class = "successMessage text-success" ></span>
+                                        </div>
+                                    </div>  
+                                    
+                                    <div class="form-group" style="margin-top: 1cm;">
+                                        <label class="col-xs-3 control-label" th:text="#{patientid}">Patient Id</label>
+                                        <div class="col-xs-6">
+                                            <div class="input-group">
+                                                <span class="input-group-addon transparent"><span
+                                                    class="glyphicon glyphicon-user"></span></span> <select
+                                                    class="form-control left-border-none" th:width="5cm"
+                                                    th:field="*{patient.patientID}" id="patientID">
+                                                    <option th:each="patient : ${patientlist}"
+                                                        th:value="${patient.patientID}"
+                                                        th:text="${patient.patientNric}" >Patient Details </option>
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-xs-3 control-label" th:text="#{doctorname}">Doctor Name</label>
+                                        <div class="col-xs-6">
+                                            <div class="input-group">
+                                                <span class="input-group-addon transparent"><span
+                                                    class="fa fa-user-md"></span></span> 
+                                                 <select class="form-control left-border-none" th:width="5cm"
+                                                    th:field="*{doctor.doctorID}" id="doctorID">
+                                                    <option th:each="doctor : ${doctorlist}"
+                                                        th:value="${doctor.doctorID}"
+                                                        th:text="${doctor.doctorName}">Doctor Details </option>
+                                                </select> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-xs-3 control-label" th:text="#{appointmentdatetime}">Appointment date
+                                            & time</label>
+                                        <div class='col-xs-6'>
+                                            <div class='col-xs-6'>
+                                                <div class="form-group">
+                                                    <div class="input-group datepicker" id='datepicker'>
+                                                        <span class="input-group-addon transparent"><span
+                                                            class="fa fa-calendar"></span></span> <input type='text'
+                                                            class="form-control" th:field="*{appointmentDate}"
+                                                            id="appointmentDate" readonly="readonly">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class='col-xs-6'>
+                                                <div class="form-group">
+                                                    <div class="input-group timepicker" id='timepicker'>
+                                                        <span class="input-group-addon transparent"><span
+                                                            class="fa fa-clock-o"></span></span> <input type='text'
+                                                            class="form-control" th:field="*{appointmentTime}"
+                                                            id="appointmentTime" readonly="readonly">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div th:if="${#fields.hasErrors('appointmentTimestamp')}"
+                                                th:errors="*{appointmentTimestamp}"
+                                                class="validationMessage text-danger">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    
+                        
+                                    <div class="form-group">
+                                        <label class="col-xs-3 control-label" th:text="#{medicalsymptoms}">Medical Symptoms</label>
+                                        <div class="col-xs-6">
+                                            <textarea class="input" rows="2"
+                                                th:field="*{medicalSymptoms}" id="medicalSymptoms"
+                                                class="form-control left-border-none"></textarea>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group"
+                                        style="margin-top: 1cm; margin-bottom: 1cm;">
+                                        <div class="col-xs-5 col-xs-offset-3">
+                                            <button type="submit" class="btn btn-default"
+                                                style="background-color: #008CBA; color: white" onclick="return confirmAction()" th:text="#{addappointment}">Add
+                                                appointment</button>                                            
+                                        </div>
+                                    </div>
+                                    
+                                                                    
+    
+                                </form>                                                                 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer navbar-fixed-bottom">&copy; LP Batch 4 Virtusa
+        Singapore</div>
+
+
+
+
+</body>
+</html>

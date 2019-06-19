@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+ <head th:include="fragments/header :: header-css">
+<script type="text/javascript">
+function deleteAction(){
+      var confirmed = confirm("Are you sure? This will remove this entry forever.");
+      return confirmed;
+}
+function confirmAction(){
+    var confirmed = confirm("Are you sure to proceed?");
+    return confirmed;
+}
+
+</script>
+<script>
+    $(document).ready(function() {
+        $('#bootstrap-table').bdt({
+            showSearchForm : 1,
+            showEntriesPerPageField : 1
+        });
+    });
+</script>
+
+ <script type="application/javascript">
+    $(document).ready(function () {
+       $('#btnSubmit').on("click",function (e) {
+           e.preventDefault();
+           $('#success_message').slideDown({ opacity: "show" }, "slow") // Do something ...
+           $('#accountForm').data('bootstrapValidator').resetForm();
+       var bv = form.data('bootstrapValidator');
+       // Use Ajax to submit form data
+       $.post(form.attr('action'), form.serialize(), function(result) {
+           console.log(result);
+       }, 'json');
+           var patientName, conditionName;
+           patientName = $('#patientName').val();
+           conditionName = $('#conditionName').val();
+         
+               var data = {};
+               data["patientName"] = patientName;
+               data["conditionName"] = conditionName;
+               $.ajax({
+                   type: "POST",
+                   contentType: "application/json",
+                   url: "/addPatient",
+                   data: JSON.stringify(data),
+                   dataType: 'json',
+                   timeout: 6000,
+                   success: function (data) {
+                       if (confirm("Product with Id " +data + " Saved")){
+                           window.location.reload();
+                       }
+                   }
+               });
+           
+       });
+    });
+</script>
+
+</head>
+<body>
+	<div id="main" style="margin-bottom: 0.5cm">
+	   <div th:include="fragments/header :: header-admin"></div>
+	   <div class="container" style="text-align: left">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h3>
+                        <span class="glyphicon glyphicon-info-sign"></span>&nbsp;<span th:text="#{managepatient}"> Manage Patient</span>
+                    </h3>
+                </div>
+                <div th:include="fragments/header :: header-table"></div>
+            </div>
+        </div>
+		<hr
+			style="width: 100%; color: black; height: 1px; background-color: black;" />
+		<div class="container-fluid"
+			style="border: 1px solid #cecece; margin: 0.5cm 1cm 0.25cm 1cm">
+			<ul class="nav nav-tabs"
+				style="margin-top: 0.25cm; background-color: #b7dce5">
+				<li ><a href="#PatientList" data-toggle="tab" th:text="#{patientlist}"><span
+						class="glyphicon glyphicon-list"></span>&nbsp;Patient List</a></li>
+				<li class="active"><a href="#AddPatient" data-toggle="tab" th:text="#{addpatient}"><span
+						class="glyphicon glyphicon-plus"></span>&nbsp;Add Patient</a></li>
+			</ul>
+			
+			<div class="alert alert-alert" id="success_message"
+                                role="alert">
+                                <a href="#" class="close" data-dismiss="alert"
+                                    aria-label="close">&times;</a> <strong>Successfully Register Patient!</strong>
+                            </div>
+			
+			<!-- view patient datatable -->
+			<div class="tab-content">
+				<div class="tab-pane  table-responsive" id="PatientList">
+					<table class="table table-hover" id="bootstrap-table">
+					
+						<thead>
+							<tr>
+								<th width="25%" th:text="#{name}">Name</th>
+								<th width="5%" th:text="#{gender}">Gender</th>
+								<th width="15%">NRIC</th>
+								<th width="15%" th:text="#{mobileno}">Phone Number</th>
+								<th width="15%" th:text="#{email}">Email</th>
+								<th width="13%" th:text="#{status}">Status</th>
+								<th width="12%" th:text="#{option}">Option</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="patient:${patientPage}">
+								<td th:text="${patient.patientName}"></td>
+								<td th:text="${patient.patientGender}"></td>
+								<td th:text="${patient.patientNric}"></td>
+								<td th:text="${patient.mobileNo}"></td>
+								<td th:text="${patient.patientEmail}"></td>
+								<td th:text="${patient.wardStatus}"></td>
+								<td class="btn-toolbar">
+									<!-- --> <a
+									th:href="@{/admin/patientpage/edit/{id}(id=${patient.patientID})}">
+										<button class="btn btn-primary btn-s" data-title="Edit"
+										data-toggle="modal" data-target="#edit" title="Edit" onclick="return confirmAction()">
+											<span class="glyphicon glyphicon-pencil"></span>
+										</button>
+								</a> <a
+									th:href="@{/admin/patientpage/delete/{id}(id=${patient.patientID})}">
+										<button class="btn btn-danger btn-s" data-title="Delete"
+											data-toggle="modal" data-target="#delete" title="Delete" onclick="return deleteAction()">
+											<span class="glyphicon glyphicon-trash"></span>
+										</button>
+								</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					
+				</div>
+				<!-- add patient form -->
+					<div class="tab-pane active" id="AddPatient">
+						<form th:action="@{/admin/patientpage/addPatient}" id="accountForm"
+							method="post" class="form-horizontal">
+							<div class="form-group" style="margin-top: 1cm;">
+								<label class="col-xs-3 control-label" th:text="#{fullname}">Full name</label>
+								<div class="col-xs-5">
+									<input type="text" class="form-control" name="patientName"
+										id="patientName" />
+										
+								</div>
+							</div>
+
+
+						<div class="form-group">
+							<label class="col-xs-3 control-label">NRIC</label>
+							<div class="col-xs-5">
+								<input type="text" class="form-control" name="patientNric"
+									id="patientNric" maxlength="9" />
+								<table>
+									<tbody>
+										<tr>
+											<td style="color: red" th:text="${error}"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+
+
+						<div class="form-group">
+								<label class="col-xs-3 control-label" th:text="#{gender}">Gender </label>
+								<div class="col-xs-5">
+									<label class="radio-inline"> <input type="radio"
+										id="patientGender" name="patientGender" required="required"
+										value="Male" th:text="#{male}"/>
+									</label> <label class="radio-inline"> <input type="radio"
+										id="patientGender" name="patientGender" value="Female" th:text="#{female}"/>
+									</label>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-xs-3 control-label" th:text="#{mobileno}">Phone Number</label>
+								<div class="col-xs-5">
+									<div class="input-group">
+										<span class="input-group-addon">+65</span> <input
+											type="number" class="form-control" name="mobileNo"
+											id="mobileNo" />
+
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-xs-3 control-label" th:text="#{email}">Email</label>
+								<div class="col-xs-5">
+									<input type="text" class="form-control" name="patientEmail"
+										id="patientEmail" />
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-xs-3 control-label" th:text="#{status}">Status</label>
+								<div class="col-xs-5 dropdown">
+									<select class="form-control" width="5cm" name="wardStatus"
+										id="wardStatus">
+										<option value="Warded" selected="selected" th:text="#{warded}">Warded</option>
+										<option value="Not Allocated" th:text="#{notwarded}">Not Allocated</option>
+									</select>
+								</div>
+							</div>
+
+
+							<div class="form-group"
+								style="margin-top: 1cm; margin-bottom: 1cm;">
+								<div class="col-xs-5 col-xs-offset-3">
+									<button type="submit" class="btn btn-default"
+										style="background-color: #008CBA; color: white" onclick="return confirmAction()" th:text="#{addpatient}">Add
+										Patient</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	<div class="footer navbar-fixed-bottom">&copy; LP Batch 4 Virtusa Singapore</div>
+</body>
+</html>

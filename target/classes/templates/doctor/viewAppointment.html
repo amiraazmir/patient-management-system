@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+ <head th:include="fragments/header :: header-css">
+</head>
+<body>
+    <div id="main" style="margin-bottom:0.5cm">
+       <div th:include="fragments/header :: header-doc"></div>
+        <div class="container" style="text-align: left">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h3>
+                        <span class="glyphicon glyphicon-info-sign"></span>&nbsp;<span th:text="#{viewappointment}">View Appointment</span>
+                    </h3>
+                </div>
+                <div th:include="fragments/header :: header-table"></div>
+            </div>
+        </div>
+        <hr
+            style="width: 100%; color: black; height: 1px; background-color: black;" />
+        <div class="container-fluid"
+            style="border: 1px solid #cecece; margin: 0.5cm 1cm 0.25cm 1cm">
+            <ul class="nav nav-tabs"
+                style="margin-top: 0.25cm; background-color: #b7dce5">
+                <li class="active"><a href="#AppointmentList" data-toggle="tab"  th:text="#{appointmentlist}"><span
+                        class="glyphicon glyphicon-list"></span>&nbsp;Appointment List</a></li>
+    
+                        
+            </ul>
+            <div class="tab-content">
+            <!-- view prescription datatable -->
+            
+            <div class="tab-pane active table-responsive" id="AppointmentList">
+                    <table class="table table-hover" id="bootstrap-table">
+                        <thead>
+                            <tr>
+<!--                                 <th style="width: 10%;">ID</th> -->
+                                <th style="width: 15%;"  th:text="#{patient}">Patient</th>
+                                <th style="width: 20%;"  th:text="#{appointmentdate}">Appointment Date</th>
+                                <th style="width: 20%;"  th:text="#{appointmenttime}">Appointment Time</th>
+                                <th style="width: 10%;"  th:text="#{medicalsymptoms}">Medical Symptoms</th>
+                             
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="appointment:${doctorAppointments}">
+                                <td th:text="${appointment.patient.patientName}"></td>
+                                <td th:text="${appointment.appointmentDate}"></td>
+                                 <td th:text="${appointment.appointmentTime}"></td>
+                                 <td th:text="${appointment.medicalSymptoms}"></td>
+                             
+                            </tr>
+                        </tbody>    
+                    </table>
+                </div>
+               
+                </div>
+            </div>
+
+      
+    </div>
+    <div class="footer navbar-fixed-bottom">&copy; LP Batch 4 Virtusa Singapore</div>
+</body>
+</html>

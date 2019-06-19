@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+ <head th:include="fragments/header :: header-css">
+
+</head>
+<body>
+	<div id="main" style="margin-bottom: 0.5cm">
+	
+		<div th:include="fragments/header :: header-edit-admin"></div>
+		<div class="container" style="text-align: left">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h3>
+                        <span class="glyphicon glyphicon-info-sign"></span>&nbsp;<span th:text="#{editmedicine}"> Edit Medicine</span>
+                    </h3>
+                </div>
+                <div th:include="fragments/header :: header-table"></div>
+            </div>
+        </div>
+		<hr
+			style="width: 100%; color: black; height: 1px; background-color: black;" />
+		<div class="container-fluid" style="border: 1px solid #cecece;">
+			<ul class="nav nav-tabs"
+				style="margin-top: 0.25cm; background-color: #b7dce5">
+				<li class="active"><a href="#AddMedicine" data-toggle="tab" th:text="#{editmedicine}"><span
+						class="glyphicon glyphicon-pencil"></span>&nbsp;Edit Medicine</a></li>
+			</ul>
+
+			<div class="tab-content">
+
+				<div class="tab-pane active" id="AddMedicine">
+					<form th:action="@{../save}"  th:object="${medicine}" id="accountForm" method="post" class="form-horizontal">
+                        <input type="hidden" th:field="*{medicineID}" class="form-control" id="medicineID" name ="medcineID" readonly="readonly"/>
+						<div class="form-group">
+							<label class="col-xs-3 control-label" th:text="#{medicine}">Medicine</label>
+							<div class="col-xs-5">
+								<input type="text" class="form-control" th:placeholder="*{medicineName}" th:value="*{medicineName}" name="medicineName" id="medicineName"/>
+							</div>
+						</div>
+						<div class="form-group">
+                            <label class="col-xs-3 control-label" th:text="#{quantity}">Quantity</label>
+                            <div class="col-xs-2">
+                                <input type="number" min="0" class="form-control" th:value="*{quantity}" name="quantity" id="quantity"
+                                   maxlength="9" />
+                            </div>
+                        </div>
+
+
+						<div class="form-group" style="margin-top: 15px;">
+							<div class="col-xs-5  col-xs-offset-3">
+								<button type="submit" class="btn btn-default" style="background-color: #008CBA; color: white" th:text="#{editmedicine}">Confirm Edit</button>
+							&nbsp;
+                                    <button type="Reset"
+                                    class="btn btn-danger" onclick="history.back();" value="Back"
+                                    style="background-color:red; color: white" id="btn_submit" th:text="#{cancel}">Cancel</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="footer navbar-fixed-bottom">&copy; LP Batch 4 Virtusa
+		Singapore</div>
+</body>
+</html>
+

@@ -1,0 +1,118 @@
+@charset "ISO-8859-1";
+html {
+    position:relative:
+    min-height: 100%;
+}
+
+body {
+    font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #333333;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #a6a6a6;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover, .offcanvas a:focus {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 20px;
+    margin-left: 50px;
+}
+
+.footer {
+  position: absolute;
+  right: 0;
+  bottom: 0px;
+  left: 0;
+  padding: 1rem;
+  width: 100%;
+  background-color: #efefef;
+  text-align: center;
+}
+
+
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+    .sidenav a {
+        font-size: 20px;
+    }
+}
+
+#main {
+    transition: margin-left .5s;
+    padding: 16px;
+}
+
+#accountForm {
+    margin-top: 15px;
+}
+
+#blankcol {
+    width: 1%;
+    border: 0px;
+}
+
+#fillcol {
+    width: 19%;
+}
+
+h1{
+    color:#0000FF;
+}
+
+h2{
+    color:#FF0000;
+}
+
+#success_message{ 
+    display: none;
+    }
+    
+    .center {
+    margin-top:50px;   
+}
+
+.modal-header {
+    padding-bottom: 5px;
+}
+
+.modal-footer {
+        padding: 0;
+    }
+    
+.modal-footer .btn-group button {
+    height:40px;
+    border-top-left-radius : 0;
+    border-top-right-radius : 0;
+    border: none;
+    border-right: 1px solid #ddd;
+}
+    
+.modal-footer .btn-group:last-child > button {
+    border-right: 0;
+}

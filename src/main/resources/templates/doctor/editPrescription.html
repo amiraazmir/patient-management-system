@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+ <head th:include="fragments/header :: header-css">
+
+</head>
+<body>
+    <div id="main" style="margin-bottom:0.5cm">
+         <div th:include="fragments/header :: header-edit-doc"></div>
+                        <div class="container" style="text-align: left">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h3>
+                        <span class="glyphicon glyphicon-info-sign"></span>&nbsp;<span th:text="#{editprescription}">Edit Prescription</span>
+                    </h3>
+                </div>
+                <div th:include="fragments/header :: header-table"></div>
+            </div>
+        </div>
+        <hr
+            style="width: 100%; color: black; height: 1px; background-color: black;" />
+            
+        <div class="container-fluid"
+            style="border: 1px solid #cecece; margin: 0.5cm 1cm 0.25cm 1cm">
+            <ul class="nav nav-tabs"
+                style="margin-top: 0.25cm; background-color: #b7dce5">
+                <li class="active"><a href="#EditPrescription" data-toggle="tab" th:text="#{editprescription}"><span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit Prescription</a></li>
+            </ul>
+            <!-- view prescription datatable -->
+            <div class="tab-content">
+                <div class="tab-pane active table-responsive" id="EditPrescription">
+                    <p></p>
+                    <form  id="accountForm" th:object="${prescription}" th:action="@{../save}" 
+                    action="#" method="post" class="form-horizontal">
+                    <!-- th:each="prescription:${prescriptions}" -->
+                        <div class="form-group" style="margin-top: 1cm;">
+                            <label class="col-xs-3 control-label">Doctor</label>
+                            <div class="col-xs-5">
+                                <input type="hidden" th:field="*{prescriptionID}" class="form-control" id="prescriptionID" name="prescriptionID" />
+                                <input type="text" class="form-control" name="doctorName"
+                                id="doctorName" required="required" readonly="readonly" th:value="*{doctorName}" placeholder="Doctor name"/>
+                           
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-xs-3 control-label" th:text="#{patient}">Patient</label>
+                            <div class="col-xs-5">
+                            <input type="hidden" th:field="*{prescriptionID}" class="form-control" id="prescriptionID" name="prescriptionID" />
+                                <input type="text" class="form-control" name="patientName"
+                                id="patientName" required="required" readonly="readonly" th:value="*{patientName}" placeholder="Patient name"/>
+               
+                            </div>
+                        </div>	
+
+                        <div class="form-group">
+                            <label class="col-xs-3 control-label" th:text="#{medicalhistory}">Case History </label>
+                            <div class="col-xs-5">
+                            <textarea  rows="2" name="casehistory"
+												id="casehistory" 
+												th:field="*{casehistory}"
+												class="form-control left-border-none"></textarea>
+											<span class="smalltxt" th:text="#{maxword}">Maximum 2000 Characters</span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-xs-3 control-label" th:text="#{medicine}">Medication</label>
+							<div class="col-xs-5">
+							<table class="table table-hover" >
+							
+							<thead>
+							  <tr>
+							    
+      							<th th:text="#{medicine}"> Medicine</th>
+      							<th th:text="#{quantity}"> Quantity</th>
+      							
+   							  </tr>
+   							  </thead>
+
+
+  							<tbody id="dataTable">
+  							<tr>
+  							<td>
+  								 <select id="medicineName" name="medicineName" class="form-control">
+                        		    <option th:each="medicine : ${medicine}" th:value="${medicine.medicineName}"
+           						     th:text="${medicine.medicineName}">Options</option>
+       							 </select>
+  							</td>
+  							<td> 							
+  							<input type="number" min="0" class="form-control" name="quantity" id="quantity" maxlength="3"  th:field="*{quantity}"></input> 							
+  							
+  							</td>
+  							
+  							<td>
+        						<button class="btn btn-default" id="btnSubmit" name="btnSubmit" onclick="return addRow('dataTable')" ><span class="glyphicon glyphicon-plus"></span></button>
+      						</td>
+      							
+      						<td>
+        						<button class="btn btn-default" name="deleteRow" onclick="return deleteRow('dataTable')" ><span class="glyphicon glyphicon-trash"></span></button>
+      						</td>
+    						</tr>
+</tbody>
+</table>
+</div>
+</div>					 
+                        <div class="form-group">
+                        <label class="col-xs-3 control-label" th:text="#{prescriptiondate}">Prescription Date</label>
+                            <div class="col-xs-5">                          
+                                   <input type="date" class="form-control" id="pdate" name="pdate" th:value="${prescription.pdate}" />
+                            </div>
+                        </div>
+                          
+
+                        
+                        <div class="form-group" 
+                        style="margin-top: 1cm; margin-bottom: 1cm;">
+                            <div class="col-xs-5 col-xs-offset-3">
+                                <button type="submit" class="btn btn-default"
+                                    style="background-color: #008CBA; color: white" th:text="#{editprescription}">Edit
+                                    Prescription</button>
+                                     <button type="Reset"
+                                    class="btn btn-danger" onclick="history.back();" value="Back"
+                                    style="background-color:red; color: white" id="btn_submit" th:text="#{cancel}">Cancel</button>
+                            </div>
+                        </div>
+						     
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer navbar-fixed-bottom">&copy; LP Batch 4 Virtusa
+        Singapore</div>
+</body>
+</html>
